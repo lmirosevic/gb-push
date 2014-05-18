@@ -1,0 +1,29 @@
+{
+	"name": "gb-push",
+	"description": "Goonbee's push service",
+	"author" : "Luka Mirosevic <luka@goonbee.com>",
+	"version": "1.0.0",
+	"private": false,
+	"main": "app.js",
+	"repository": {
+		"type": "git",
+		"url": "http://github.com/lmirosevic/gb-push.git"
+	},
+	"dependencies": {
+		"gb-api": "1.0.x",
+		"gb-toolbox": "1.0.x",
+		"nconf": "0.6.x",
+		"underscore": "1.6.x",
+		"mongoose": "3.8.x",
+		"q": "1.0.x"
+	},
+	"devDependencies": {
+		"nodemon": "1.0.x",
+		"memwatch": "0.2.x"
+	},
+	"engines": {
+		"node": "0.10.x",
+		"npm": "1.4.x"
+	},
+	"license": "Apache, Version 2.0"
+}
