@@ -1,6 +1,6 @@
 # gb-push ![License](https://img.shields.io/badge/license-Apache_2-green.svg?style=flat)
 
-Goonbee's push service: registration of push tokens, channel subscription and notification delivery for APNS and GCM.
+Goonbee's simple push service: registration of push tokens, channel subscription and notification delivery for APNS and GCM.
 
 
 Copyright & License
