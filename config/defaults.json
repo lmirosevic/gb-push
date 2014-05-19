@@ -1,0 +1,14 @@
+{
+	"PORT": 56201,
+	"PERSISTENCE": {
+		"type": "InMemory",
+		"options": { 
+			"url": "mongodb://localhost:27017/push",
+			"collectionNamespace": "push",
+			"reconnectionTimeout": 1000
+		}
+	},
+	"LOG_CALLS": true,
+	"LOG_OUTPUT": true,
+	"LOG_ERRORS": true
+}

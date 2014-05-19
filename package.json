@@ -10,8 +10,9 @@
 		"url": "http://github.com/lmirosevic/gb-push.git"
 	},
 	"dependencies": {
-		"gb-api": "1.0.x",
-		"gb-toolbox": "1.0.x",
+		"gb-api": "1.x",
+		"gb-toolbox": "1.x",
+		"thrift": "0.9.x",
 		"nconf": "0.6.x",
 		"underscore": "1.6.x",
 		"mongoose": "3.8.x",
@@ -19,7 +20,8 @@
 	},
 	"devDependencies": {
 		"nodemon": "1.0.x",
-		"memwatch": "0.2.x"
+		"memwatch": "0.2.x",
+		"cli-color": "0.3.x"
 	},
 	"engines": {
 		"node": "0.10.x",

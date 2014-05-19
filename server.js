@@ -7,4 +7,5 @@
 //
 
 // Compatibility layer for AWS OpsWorks
+//lm set port to 80, and add notice to set up ELB correctly
 require('./app');
