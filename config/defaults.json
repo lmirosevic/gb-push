@@ -1,11 +1,12 @@
 {
 	"PORT": 56201,
 	"PERSISTENCE": {
-		"type": "InMemory",
+		"type": "MongoDB",
 		"options": { 
 			"url": "mongodb://localhost:27017/push",
 			"collectionNamespace": "push",
-			"reconnectionTimeout": 1000
+			"reconnectionTimeout": 1000,
+			"debug": false
 		}
 	},
 	"LOG_CALLS": true,
