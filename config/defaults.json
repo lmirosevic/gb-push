@@ -9,6 +9,12 @@
 			"debug": false
 		}
 	},
+	"MESSAGE_INGRESS": {
+		"type": "Resque",
+		"options": {
+			"redis": "redis://localhost:6379/3"
+		}
+	},
 	"LOG_CALLS": true,
 	"LOG_OUTPUT": true,
 	"LOG_ERRORS": true
