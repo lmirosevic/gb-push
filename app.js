@@ -12,10 +12,37 @@ var nconf = require('nconf'),
     ttypes = require('./thrift/gen-nodejs/GoonbeePushService_types'),
     ttypesShared = require('./thrift/gen-nodejs/GoonbeeShared_types');
 
-// Config
 nconf.argv()
      .env()
      .file({file: './config/defaults.json'});
+
+/* Plugins */
+
+var persistence = require('./lib/persistence/' + nconf.get('PERSISTENCE').type);
+var messageIngress = require('./lib/message-ingress/' + nconf.get('MESSAGE_INGRESS').type);
+var pushDeliveryService = require('./lib/push-deliver-service/' + nconf.get('PUSH_DELIVERY_SERVICE').type);
+
+/* Push routing and delivery */
+
+messageIngress.listen(function(channel, notification) {
+  persistence.channelSubscribers(channel, function(subscribers) {
+    // create new message
+    var message = {};
+    
+    message.targets = subscribers; // pushDeliveryService expects targets as type PushToken
+    message.payload = {
+      c: channel,
+      p: notification.payload
+    };
+    message.alert = notification.message;
+  });
+
+  pushDeliveryService.deliver(message, function(err) {
+    //lm potentially add error handling here
+  });
+});
+
+/* Public subscription API */
 
 api.errors.setShouldLogOutput(nconf.get('LOG_OUTPUT'));
 api.errors.setShouldLogCalls(nconf.get('LOG_CALLS'));
@@ -36,10 +63,6 @@ api.errors.setErrorMapping(
   new ttypesShared.RequestError({status: ttypesShared.ResponseStatus.GENERIC, message: 'A generic error occured.'})
 );
 
-// Persistence layer
-var persistence = require('./lib/persistence/' + nconf.get('PERSISTENCE').type);
-
-// Server implementation
 var PushServiceImplementation = function() {
   /** 
    * GoonbeeShared BaseService
@@ -68,4 +91,4 @@ var PushServiceImplementation = function() {
 
 // Start server
 api.createThriftServer(GBPushService, new PushServiceImplementation()).listen(nconf.get('PORT'));
-console.log("Push server started on port " + nconf.get('PORT'));
+console.log('Push server started on port ' + nconf.get('PORT'));
