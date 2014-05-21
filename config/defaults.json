@@ -12,14 +12,17 @@
 	"MESSAGE_INGRESS": {
 		"type": "Resque",
 		"options": {
-			"redis": "redis://localhost:6379/3"
+			"redis": "redis://localhost:6379/3",
+			"queue": "push.notifications",
+			"maxReconnectionTimeout": 1000
 		}
 	},
 	"PUSH_DELIVERY_SERVICE": {
 		"type": "GBPushNotificationsService",
 		"options": {
 			"redis": "redis://localhost:6379/4",
-			"queue": "push"
+			"queue": "push",
+			"maxReconnectionTimeout": 1000
 		}
 	},
 	"LOG_CALLS": true,

@@ -20,7 +20,7 @@ nconf.argv()
 
 var persistence = require('./lib/persistence/' + nconf.get('PERSISTENCE').type);
 var messageIngress = require('./lib/message-ingress/' + nconf.get('MESSAGE_INGRESS').type);
-var pushDeliveryService = require('./lib/push-deliver-service/' + nconf.get('PUSH_DELIVERY_SERVICE').type);
+var pushDeliveryService = require('./lib/push-delivery-service/' + nconf.get('PUSH_DELIVERY_SERVICE').type);
 
 /* Push routing and delivery */
 
@@ -38,7 +38,7 @@ messageIngress.listen(function(channel, notification) {
   });
 
   pushDeliveryService.deliver(message, function(err) {
-    //lm potentially add error handling here
+    if (err) console.log('An error occured delivering a push notification', err);
   });
 });
 
@@ -91,4 +91,4 @@ var PushServiceImplementation = function() {
 
 // Start server
 api.createThriftServer(GBPushService, new PushServiceImplementation()).listen(nconf.get('PORT'));
-console.log('Push server started on port ' + nconf.get('PORT'));
+console.log('Push subscription service started on port ' + nconf.get('PORT'));
