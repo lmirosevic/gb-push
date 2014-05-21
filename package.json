@@ -17,12 +17,12 @@
 		"underscore": "1.6.x",
 		"mongoose": "3.8.x",
 		"q": "1.0.x",
-		"coffee-resque": "0.1.x"
+		"coffee-resque": "0.1.x",
+		"cli-color": "0.3.x"
 	},
 	"devDependencies": {
 		"nodemon": "1.0.x",
-		"memwatch": "0.2.x",
-		"cli-color": "0.3.x"
+		"memwatch": "0.2.x"
 	},
 	"engines": {
 		"node": "0.10.x",

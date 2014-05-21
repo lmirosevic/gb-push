@@ -34,7 +34,10 @@ messageIngress.listen(function(channel, notification) {
       c: channel,
       p: notification.payload
     };
-    message.alert = notification.message;
+    message.alert = notification.alert;
+    message.badge = notification.badge;
+    message.sound = notification.sound;
+    message.topic = notification.topic;
   });
 
   pushDeliveryService.deliver(message, function(err) {
