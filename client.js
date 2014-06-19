@@ -19,7 +19,7 @@ var resultLogger = function(err, result) {
 };
 
 
-client.setChannelSubscriptionStatus(new ttypes.PushToken({type: ttypes.PushTokenType.APNS, token: "blabla123"}), "wcsg.team.cro.en", true, resultLogger);
+client.setChannelSubscriptionStatus(new ttypes.PushToken({type: ttypes.PushTokenType.APNS, token: "blabla123"}), "wcsg.match.match_madeup", true, resultLogger);
 
 // client.isUsernameAvailable('luka', function(err, result) {
 //   resultLogger.apply(this, arguments);

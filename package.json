@@ -18,7 +18,9 @@
 		"mongoose": "3.8.x",
 		"q": "1.0.x",
 		"coffee-resque": "0.1.x",
-		"cli-color": "0.3.x"
+		"cli-color": "0.3.x",
+		"winston": "0.7.x",
+		"winston-logentries": "1.x"
 	},
 	"devDependencies": {
 		"nodemon": "1.0.x",

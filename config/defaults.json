@@ -13,7 +13,7 @@
 		"type": "Resque",
 		"options": {
 			"redis": "redis://localhost:6379/2",
-			"queue": "push.notifications",
+			"queue": "push.client",
 			"maxReconnectionTimeout": 1000
 		}
 	},

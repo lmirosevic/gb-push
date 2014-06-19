@@ -6,15 +6,13 @@
 //  Copyright (c) 2014 Goonbee. All rights reserved.
 //
 
-var nconf = require('nconf'),
+var nconf = require('./lib/config'),
+    logger = require('./lib/logger'),
+    _ = require('underscore'),
     api = require('gb-api'),
     GBPushService = require('./thrift/gen-nodejs/GoonbeePushService'),
     ttypes = require('./thrift/gen-nodejs/GoonbeePushService_types'),
     ttypesShared = require('./thrift/gen-nodejs/GoonbeeShared_types');
-
-nconf.argv()
-     .env()
-     .file({file: './config/defaults.json'});
 
 /* Plugins */
 
@@ -25,23 +23,44 @@ var pushDeliveryService = require('./lib/push-delivery-service/' + nconf.get('PU
 /* Push routing and delivery */
 
 messageIngress.listen(function(channel, notification) {
-  persistence.channelSubscribers(channel, function(subscribers) {
-    // create new message
-    var message = {};
-    
-    message.targets = subscribers; // pushDeliveryService expects targets as type PushToken
-    message.payload = {
-      c: channel,
-      p: notification.payload
-    };
-    message.alert = notification.alert;
-    message.badge = notification.badge;
-    message.sound = notification.sound;
-    message.topic = notification.topic;
-  });
+  console.log('-------got message on channel: ' + channel);
+  // console.log('got message with notif:');
+  // console.log(notification);
 
-  pushDeliveryService.deliver(message, function(err) {
-    if (err) console.log('An error occured delivering a push notification', err);
+  persistence.channelSubscribers(channel, function(err, subscribers) {
+    console.log('--------got some subscribers: ');
+    console.log(subscribers);
+    console.log('---------got some error:');
+    console.log(err);
+
+    // make sure we have some subscribers
+    if (!_.isUndefined(subscribers) && !_.isNull(subscribers) && _.isArray(subscribers) && _.size(subscribers) > 0) {
+      console.log('---------forwarding to delivery service');
+      // create new message
+      var message = {};
+      
+      message.targets = subscribers; // pushDeliveryService expects targets as type PushToken
+      message.alert = notification.alert;
+      if (!_.isUndefined(notification.payload)) message.payload = {
+        c: channel,
+        p: notification.payload
+      };
+      if (!_.isUndefined(notification.badge)) message.badge = notification.badge;
+      if (!_.isUndefined(notification.sound)) message.sound = notification.sound;
+      if (!_.isUndefined(notification.topic)) message.topic = notification.topic;
+
+      // console.log('message looks like this:');
+      // console.log(message);
+
+      // deliver the message
+      pushDeliveryService.deliver(message, function(err) {
+        if (err) logger.info('An error occured delivering a push notification', err);
+      });
+    }
+    else {
+      // noop
+      console.log('no subscribers, discarding...');//lm kill
+    }
   });
 });
 
@@ -50,6 +69,7 @@ messageIngress.listen(function(channel, notification) {
 api.errors.setShouldLogOutput(nconf.get('LOG_OUTPUT'));
 api.errors.setShouldLogCalls(nconf.get('LOG_CALLS'));
 api.errors.setShouldLogErrors(nconf.get('LOG_ERRORS'));
+api.errors.setLoggingFunction(logger.info);
 
 // Error mapping from application -> thrift
 api.errors.setErrorMapping(
@@ -79,8 +99,12 @@ var PushServiceImplementation = function() {
    * Goonbee Push Service 
    */
 
-  this.setChannelSubscriptionStatus = function(pushToken, channel, subsriptionStatus, result) {
-    persistence.setChannelSubscriptionStatus(pushToken, channel, subsriptionStatus, result);
+  this.setChannelSubscriptionStatus = function(pushToken, channel, subscriptionStatus, result) {
+    console.log(pushToken);
+    console.log(channel);
+    console.log(subscriptionStatus);
+
+    persistence.setChannelSubscriptionStatus(pushToken, channel, subscriptionStatus, result);
   };
 
   this.subscribedChannels = function(pushToken, range, result) {
@@ -94,4 +118,4 @@ var PushServiceImplementation = function() {
 
 // Start server
 api.createThriftServer(GBPushService, new PushServiceImplementation()).listen(nconf.get('PORT'));
-console.log('Push subscription service started on port ' + nconf.get('PORT'));
+logger.info('Push subscription service started on port ' + nconf.get('PORT'));
