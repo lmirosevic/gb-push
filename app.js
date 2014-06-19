@@ -23,19 +23,9 @@ var pushDeliveryService = require('./lib/push-delivery-service/' + nconf.get('PU
 /* Push routing and delivery */
 
 messageIngress.listen(function(channel, notification) {
-  console.log('-------got message on channel: ' + channel);
-  // console.log('got message with notif:');
-  // console.log(notification);
-
   persistence.channelSubscribers(channel, function(err, subscribers) {
-    console.log('--------got some subscribers: ');
-    console.log(subscribers);
-    console.log('---------got some error:');
-    console.log(err);
-
     // make sure we have some subscribers
     if (!_.isUndefined(subscribers) && !_.isNull(subscribers) && _.isArray(subscribers) && _.size(subscribers) > 0) {
-      console.log('---------forwarding to delivery service');
       // create new message
       var message = {};
       
@@ -49,9 +39,6 @@ messageIngress.listen(function(channel, notification) {
       if (!_.isUndefined(notification.sound)) message.sound = notification.sound;
       if (!_.isUndefined(notification.topic)) message.topic = notification.topic;
 
-      // console.log('message looks like this:');
-      // console.log(message);
-
       // deliver the message
       pushDeliveryService.deliver(message, function(err) {
         if (err) logger.info('An error occured delivering a push notification', err);
@@ -59,7 +46,6 @@ messageIngress.listen(function(channel, notification) {
     }
     else {
       // noop
-      console.log('no subscribers, discarding...');//lm kill
     }
   });
 });
@@ -100,10 +86,6 @@ var PushServiceImplementation = function() {
    */
 
   this.setChannelSubscriptionStatus = function(pushToken, channel, subscriptionStatus, result) {
-    console.log(pushToken);
-    console.log(channel);
-    console.log(subscriptionStatus);
-
     persistence.setChannelSubscriptionStatus(pushToken, channel, subscriptionStatus, result);
   };
 
