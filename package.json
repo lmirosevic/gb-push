@@ -12,7 +12,7 @@
 	"dependencies": {
 		"gb-api": "1.x",
 		"gb-toolbox": "1.x",
-		"thrift": "0.9.x",
+		"thrift": "0.9.1",
 		"nconf": "0.6.x",
 		"underscore": "1.6.x",
 		"mongoose": "3.8.x",
