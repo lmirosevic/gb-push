@@ -2,7 +2,7 @@
 	"name": "gb-push",
 	"description": "Goonbee's push service",
 	"author" : "Luka Mirosevic <luka@goonbee.com>",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"private": false,
 	"main": "app.js",
 	"repository": {
