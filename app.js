@@ -30,14 +30,16 @@ messageIngress.listen(function(channel, notification) {
       var message = {};
       
       message.targets = subscribers; // pushDeliveryService expects targets as type PushToken
-      message.alert = notification.alert;
+      
+      if (!_.isUndefined(notification.alert)) message.alert = notification.alert;
+      if (!_.isUndefined(notification.badge)) message.badge = notification.badge;
+      if (!_.isUndefined(notification.sound)) message.sound = notification.sound;
+      if (!_.isUndefined(notification.contentAvailable)) message.contentAvailable = notification.contentAvailable;
+      if (!_.isUndefined(notification.topic)) message.topic = notification.topic;
       if (!_.isUndefined(notification.payload)) message.payload = {
         c: channel,
         p: notification.payload
       };
-      if (!_.isUndefined(notification.badge)) message.badge = notification.badge;
-      if (!_.isUndefined(notification.sound)) message.sound = notification.sound;
-      if (!_.isUndefined(notification.topic)) message.topic = notification.topic;
 
       // deliver the message
       pushDeliveryService.deliver(message, function(err) {
